@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Ability to provide CRUD operations and create table for given entity
+ */
 @Repository
 public interface UserRegistrationRepository extends JpaRepository<UserRegistration,Integer> {
 

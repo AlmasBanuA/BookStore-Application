@@ -6,6 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
+/**
+ * Ability to provide CRUD operations and create table for given entity
+ */
+
 public interface BookStoreCartRepository extends JpaRepository<Cart,Integer> {
 
     @Query(value="select * from cart where book_id =:bookId",nativeQuery =true)

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Ability to handle exception
+ */
 @ControllerAdvice
 public class BookExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -23,11 +26,13 @@ public class BookExceptionHandler {
         ResponseDTO responseDTO = new ResponseDTO("Exception while processing REST requests",errMesg);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(BookStoreException.class)
     public ResponseEntity<ResponseDTO> handleBookNotFound(BookStoreException exception) {
         ResponseDTO response = new ResponseDTO("Invalid input", exception.getMessage());
         return new ResponseEntity<ResponseDTO>(response, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
         ResponseDTO response = new ResponseDTO("Please change the http method type", ex.getMessage());

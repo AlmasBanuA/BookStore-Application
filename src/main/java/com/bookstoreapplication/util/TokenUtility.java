@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TokenUtility {
-    private static final String TOKEN_SECRET = "Abhishek";
+    private static final String TOKEN_SECRET = "Almas";
 
 
     public  String createToken(int id)   {
@@ -27,7 +27,6 @@ public class TokenUtility {
             exception.printStackTrace();
             //log Token Signing Failed
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
@@ -46,7 +45,6 @@ public class TokenUtility {
         try {
             verification = JWT.require(Algorithm.HMAC256(TOKEN_SECRET));
         } catch (IllegalArgumentException  e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         JWTVerifier jwtverifier=verification.build();

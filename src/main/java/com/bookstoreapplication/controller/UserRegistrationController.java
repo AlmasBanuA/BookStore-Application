@@ -13,30 +13,46 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * In Controller class we write the API's here
+ */
 @RestController
 @RequestMapping("/user")
 
 public class UserRegistrationController {
 
+    /**
+     * Autowired IUserService to inject its dependency here
+     */
     @Autowired
     IUserService userRegistrationService;
 
-    //Add User
+    /**
+     * Ability to call api to register user record
+     * @param userDTO -represents object of UserDTO class
+     * @return -accepted user information in JSON format
+     */
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> addUserInBookStore(@Valid @RequestBody UserDTO userDTO){
+    public ResponseEntity<ResponseDTO> addUserInBookStore( @Valid @RequestBody UserDTO userDTO){
         String newUser= userRegistrationService.addUser(userDTO);
         ResponseDTO responseDTO=new ResponseDTO("User Registered Successfully",newUser);
         return new ResponseEntity(responseDTO, HttpStatus.CREATED);
     }
-    //Login
+
+    /**
+     * Ability to call api to login user
+     * @param userLoginDTO -represents object of UserLoginDTO class
+     * @return -return all stored data with message
+     */
     @PostMapping("/login")
-    public String userLogin(@RequestParam String email,@RequestBody String password) {
-        UserLoginDTO userLoginDTO=new UserLoginDTO(email, password);
-        String response = userRegistrationService.loginUser(userLoginDTO.getEmail(),userLoginDTO.getPassword());
-        return response;
+    public ResponseEntity<ResponseDTO> userLogin(@RequestBody UserLoginDTO userLoginDTO) {
+        return new ResponseEntity<ResponseDTO>(userRegistrationService.loginUser(userLoginDTO),HttpStatus.OK);
     }
 
-    //Get All Users
+    /**
+     * Ability to call api to retrieve all user records
+     * @return -return all stored data with message
+     */
     @GetMapping(value = "/getAll")
     public ResponseEntity<String> getAllUser()
     {
@@ -45,7 +61,11 @@ public class UserRegistrationController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
-
+    /**
+     * Ability to call api to retrieve All user record by toke
+     * @param token -represents token
+     * @return -return all stored data with message
+     */
     @GetMapping(value = "/getAll/{token}")
     public ResponseEntity<ResponseDTO> getAllUserDataByToken(@PathVariable String token)
     {
@@ -54,31 +74,49 @@ public class UserRegistrationController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
-//    //Get by email id
-//    @GetMapping("/getByEmailId/{emailId}")
-//    public ResponseEntity<ResponseDTO> getUserByEmailId(@PathVariable("emailId") String emailId) {
-//        return new ResponseEntity<ResponseDTO>( new
-//                ResponseDTO("Get User Data by Email",
-//                userRegistrationService.getUserByEmailId(emailId)), HttpStatus.OK);
-//    }
+    /**
+     * Ability to call api to retrieve user record by emailId
+     * @param emailId -represents emailId
+     * @return -return all stored data with message by the emailId
+     */
+    @GetMapping("/getByEmailId/{emailId}")
+    public ResponseEntity<ResponseDTO> getUserByEmailId(@PathVariable("emailId") String emailId) {
+        return new ResponseEntity<ResponseDTO>( new
+                ResponseDTO("Get User Data by Email",
+                userRegistrationService.getUserByEmailId(emailId)), HttpStatus.OK);
+    }
 
-    //Get user by user id
+    /**
+     * Ability to call api to retrieve user record by token
+     * @param token -represents token
+     * @return -return all stored data with message
+     */
     @GetMapping("/getBy/{token}")
     public ResponseEntity<ResponseDTO> getUserById(@PathVariable String token) {
         return new ResponseEntity<ResponseDTO>( new
-                ResponseDTO("Get User Data By Id",
+                ResponseDTO("Get User Data By token",
                 userRegistrationService.getUserById(token)), HttpStatus.OK);
     }
 
 
-    //Forget password by email
+    /**
+     * Ability to call api to change password if old password has forgotten
+     * @param email -represents email
+     * @param password -represents password
+     * @return -return all stored data with message
+     */
     @PostMapping("/forgotPassword")
     public ResponseEntity<String> forgotPassword(@RequestParam String email, @RequestParam String password) {
         String resp = userRegistrationService.forgotPassword(email,password);
         return new ResponseEntity(resp, HttpStatus.OK);
     }
 
-    //Update user by id
+    /**
+     * Ability to call api to update User By Email
+     * @param email -represents email
+     * @param userDTO -represents object of UserDTO class
+     * @return -return updated information
+     */
     @PutMapping("/updateUserByEmail/{email}")
     public ResponseEntity<ResponseDTO> updateUserById(@PathVariable String email,@Valid @RequestBody UserDTO userDTO){
         UserRegistration updateUser= userRegistrationService.updateUser(email,userDTO);
@@ -86,18 +124,30 @@ public class UserRegistrationController {
         return new ResponseEntity(dto,HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Ability to call api to update User By id
+     * @param id -represents id
+     * @param userDTO -represents object of UserDTO class
+     * @return -return updated information
+     */
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateRecordById(@PathVariable Integer id,@Valid @RequestBody UserDTO userDTO){
         UserRegistration entity = userRegistrationService.updateRecordByToken(id,userDTO);
         ResponseDTO dto = new ResponseDTO("User Record updated successfully",entity);
         return new ResponseEntity(dto,HttpStatus.ACCEPTED);
     }
-//    @GetMapping("/getToken/{email}")
-//    public ResponseEntity<ResponseDTO> getToken(@PathVariable String email){
-//        String generatedToken=userRegistrationService.getToken(email);
-//        ResponseDTO responseDTO=new ResponseDTO("Token for mail id sent on mail successfully",generatedToken);
-//        return new ResponseEntity(responseDTO,HttpStatus.OK);
-//    }
+
+    /**
+     * Ability to call api to get token if forgot password
+     * @param email -represents email
+     * @return -return all stored data with message
+     */
+    @GetMapping("/getToken/{email}")
+    public ResponseEntity<ResponseDTO> getToken(@PathVariable String email){
+        String generatedToken=userRegistrationService.getToken(email);
+        ResponseDTO responseDTO=new ResponseDTO("Token for mail id sent on mail successfully",generatedToken);
+        return new ResponseEntity(responseDTO,HttpStatus.OK);
+    }
 
 
 }

@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * The @Entity annotation specifies that the class is an entity and is mapped to a database table
+ */
 @Entity
 @Data
 public class Book {

@@ -1,17 +1,22 @@
 package com.bookstoreapplication.service;
 
+import com.bookstoreapplication.dto.ResponseDTO;
 import com.bookstoreapplication.dto.UserDTO;
+import com.bookstoreapplication.dto.UserLoginDTO;
 import com.bookstoreapplication.model.UserRegistration;
 
 import java.util.List;
 
+/**
+ * Created IUserService interface to achieve abstraction
+ */
 public interface IUserService {
 
     String addUser(UserDTO userDTO);
 
     List<UserRegistration> getAllUsers();
 
-    String loginUser(String email_id, String password);
+    ResponseDTO loginUser(UserLoginDTO userLoginDTO);
 
     Object getUserById(String token);
 

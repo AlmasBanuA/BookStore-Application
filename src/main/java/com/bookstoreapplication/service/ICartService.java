@@ -6,6 +6,9 @@ import com.bookstoreapplication.model.Cart;
 
 import java.util.Optional;
 
+/**
+ * Created ICartService interface to achieve abstraction
+ */
 public interface ICartService {
 
     ResponseDTO getCartDetails();

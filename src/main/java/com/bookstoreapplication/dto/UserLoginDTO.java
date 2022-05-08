@@ -5,6 +5,9 @@ import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * Data transfer object to login user
+ */
 @Data
 public class UserLoginDTO {
     @Email

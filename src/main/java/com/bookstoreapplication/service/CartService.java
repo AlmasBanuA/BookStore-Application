@@ -18,8 +18,15 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+
+/**
+ * Created CartService class to serve api calls done by controller layer
+ */
 public class CartService implements ICartService{
 
+    /**
+     * Autowired interfaces to inject its dependency here
+     */
     @Autowired
     BookStoreRepository bookStoreRepository;
     @Autowired
@@ -27,7 +34,30 @@ public class CartService implements ICartService{
     @Autowired
     BookStoreCartRepository bookStoreCartRepository;
 
+    /**
+     * create a method name as insertItems
+     * Ability to save cart details to repository
+     * @param cartdto - cart data
+     * @return - save all data
+     */
+    @Override
+    public Cart insertItems(CartDTO cartdto) {
+        Optional<Book> book = bookStoreRepository.findById(cartdto.getBookId());
+        Optional<UserRegistration> userRegistration = userRegistrationRepository.findById(cartdto.getUserId());
+        if (book.isPresent() && userRegistration.isPresent()) {
+            Cart newCart = new Cart(cartdto.getQuantity(), book.get(), userRegistration.get());
+            bookStoreCartRepository.save(newCart);
+            return newCart;
+        } else {
+            throw new BookStoreException("Book or User does not exists");
+        }
+    }
 
+    /**
+     * create a method name as getCartDetails
+     * - Ability to get all cart' data by findAll() method
+     * @return - all data
+     */
     @Override
     public ResponseDTO getCartDetails() {
         List<Cart> getCartDetails=bookStoreCartRepository.findAll();
@@ -46,6 +76,12 @@ public class CartService implements ICartService{
         }
     }
 
+    /**
+     * create a method name as getCartDetailsById
+     * - Ability to get cart data by cartId
+     * @param cartId - cart id
+     * @return - cart data by id
+     */
     @Override
     public Optional<Cart> getCartDetailsById(Integer cartId) {
         Optional<Cart> getCartData=bookStoreCartRepository.findById(cartId);
@@ -57,6 +93,12 @@ public class CartService implements ICartService{
         }
     }
 
+    /**
+     * create a method name as getCartRecordByBookId
+     * - Ability to get cart data by bookId
+     * @param bookId - bookID
+     * @return - cart data by book id
+     */
     public Cart getCartRecordByBookId(Integer bookId) {
         Optional<Cart> cart = bookStoreCartRepository.findByBookId(bookId);
         if(cart.isEmpty()) {
@@ -69,6 +111,12 @@ public class CartService implements ICartService{
         }
     }
 
+    /**
+     * create a method name as deleteCartItemById
+     * ability to delete data by particular cart id
+     * @param cartId - cart id
+     * @return - cartId and Acknowledgment message
+     */
     @Override
     public Optional<Cart> deleteCartItemById(Integer cartId) {
         Optional<Cart> deleteData=bookStoreCartRepository.findById(cartId);
@@ -82,6 +130,13 @@ public class CartService implements ICartService{
 
     }
 
+    /**
+     * create a method name as updateRecordById
+     * Ability to update cart data for particular id
+     * @param cartId - cart id
+     * @param cartDTO - cart data
+     * @return - updated cart information in JSON format
+     */
     @Override
     public Cart updateRecordById(Integer cartId, CartDTO cartDTO) {
         Optional<Cart> cart = bookStoreCartRepository.findById(cartId);
@@ -103,17 +158,5 @@ public class CartService implements ICartService{
         }
     }
 
-    @Override
-    public Cart insertItems(CartDTO cartdto) {
-        Optional<Book> book = bookStoreRepository.findById(cartdto.getBookId());
-        Optional<UserRegistration> userRegistration = userRegistrationRepository.findById(cartdto.getUserId());
-        if (book.isPresent() && userRegistration.isPresent()) {
-            Cart newCart = new Cart(cartdto.getQuantity(), book.get(), userRegistration.get());
-            bookStoreCartRepository.save(newCart);
-            return newCart;
-        } else {
-            throw new BookStoreException("Book or User does not exists");
-        }
-    }
 
 }

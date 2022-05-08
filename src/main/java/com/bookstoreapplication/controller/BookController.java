@@ -13,14 +13,25 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * In Controller class we write the API's here
+ */
 @RestController
 @RequestMapping("/book")
 public class BookController {
 
+    /**
+     * Autowired IBookService to inject its dependency here
+     */
     @Autowired
     IBookService bookService;
 
-    // Add Data to repo
+    /**
+     * Ability to call api to insert Book record
+     * @param bookDTO- represents object of BookDTO class
+     * @return- accepted book information in JSON format
+     * @apiNote accepts the data in JSON format and stores it in DB
+     */
     @PostMapping("/insert")
     public ResponseEntity<String> addBookToRepository(@Valid @RequestBody BookDTO bookDTO){
         Book newBook= bookService.createBook(bookDTO);
@@ -28,7 +39,10 @@ public class BookController {
         return new ResponseEntity(responseDTO, HttpStatus.CREATED);
     }
 
-    //Get All
+    /**
+     * Ability to call api to retrieve all book records
+     * @return- return all stored data with message
+     */
     @GetMapping(value = "/getAll")
     public ResponseEntity<String> getAllBookData()
     {
@@ -37,7 +51,11 @@ public class BookController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
-    //Get ParticularData by BookId
+    /**
+     * Ability to call api to get record by BookId
+     * @param BookId -represents BookId
+     * @return -return all stored data with message
+     */
     @GetMapping(value = "/getBy/{BookId}")
     public ResponseEntity<String> getBookDataById(@PathVariable int BookId)
     {
@@ -46,15 +64,23 @@ public class BookController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
-    //Delete by id
+    /**
+     * Ability to call api to delete book record by BookId
+     * @param BookId -represents BookId
+     * @return -return all stored data with message by deleting this bookId
+     */
     @DeleteMapping("/delete/{BookId}")
     public ResponseEntity<String> deleteRecordById(@PathVariable int BookId){
         ResponseDTO dto = new ResponseDTO("Book Record deleted successfully", bookService.deleteRecordById(BookId));
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
-
-    //update record by id
+    /**
+     * Ability to call api to update book record by BookId
+     * @param BookId -represents BookId
+     * @param bookDTO represents object of BookDTO class
+     * @return -return updated information
+     */
     @PutMapping("/updateBookById/{BookId}")
     public ResponseEntity<String> updateRecordById(@PathVariable Integer BookId,@Valid @RequestBody BookDTO bookDTO){
         Book updateRecord = bookService.updateRecordById(BookId,bookDTO);

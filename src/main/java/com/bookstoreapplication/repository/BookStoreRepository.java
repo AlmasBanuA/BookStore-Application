@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Ability to provide CRUD operations and create table for given entity
+ */
 @Repository
 public interface BookStoreRepository extends JpaRepository<Book,Integer> {
 

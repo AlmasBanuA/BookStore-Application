@@ -4,6 +4,9 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * Data transfer object of Book Model
+ */
 @Data
 public class BookDTO {
 
