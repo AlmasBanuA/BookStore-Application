@@ -88,6 +88,11 @@ public class BookController {
         return new ResponseEntity(dto,HttpStatus.ACCEPTED);
     }
 
+    /**
+     * ability to search Book by particular book name
+     * @param name -bookName
+     * @return -return book Data
+     */
     @GetMapping("searchByBookName/{name}")
     public ResponseEntity<ResponseDTO> getBookByName(@PathVariable("name") String name)
     {
@@ -96,8 +101,10 @@ public class BookController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
-
-
+    /**
+     * ability to sort the Books by its Price in Ascending Order
+     * @return -return books in ascending order
+     */
     @GetMapping("/sortAsc")
     public ResponseEntity<ResponseDTO> getBooksInAscendingOrder()
     {
@@ -106,7 +113,10 @@ public class BookController {
         return new ResponseEntity(dto,HttpStatus.OK);
     }
 
-
+    /**
+     * ability to sort the Books by its Price in Descending Order
+     * @return -return books in descending order
+     */
     @GetMapping("/sortDesc")
     public ResponseEntity<ResponseDTO> getBooksInDescendingOrder()
     {
