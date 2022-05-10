@@ -104,6 +104,45 @@ public class BookService implements IBookService{
         return "data deleted succesfull";
     }
 
+    /**
+     * create a method name as getBookByName
+     * ability to get Book data by particular book name
+     * @param bookName -bookName
+     * @return -return book Data
+     */
+    @Override
+    public List<Book> getBookByName(String bookName) {
+        List<Book> findBook= bookStoreRepository.findByBookName(bookName);
+        if(findBook.isEmpty()){
+            throw new BookStoreException(" Details for provided Book is not found");
+        }
+        return findBook;
+    }
+
+    /**
+     * create a method name as sortedListOfBooksInAscendingOrder
+     * ability to sort the Books by its Price in Ascending Order
+     * @return -return books in ascending order
+     */
+
+    @Override
+    public List<Book> sortedListOfBooksInAscendingOrder() {
+        List<Book> getSortedList=  bookStoreRepository.getSortedListOfBooksInAsc();
+        return getSortedList;
+    }
+
+    /**
+     * create a method name as sortedListOfBooksInDescendingOrder
+     * ability to sort the Books by its Price in Descending Order
+     * @return -return books in descending order
+     */
+
+    @Override
+    public List<Book> sortedListOfBooksInDescendingOrder() {
+        List<Book> getSortedListInDesc=  bookStoreRepository.getSortedListOfBooksInDesc();
+        return getSortedListInDesc;
+    }
+
 
 }
 

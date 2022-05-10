@@ -1,10 +1,12 @@
 package com.bookstoreapplication.service;
 
 import com.bookstoreapplication.dto.CartDTO;
+import com.bookstoreapplication.dto.OrderDTO;
 import com.bookstoreapplication.dto.ResponseDTO;
 import com.bookstoreapplication.exception.BookStoreException;
 import com.bookstoreapplication.model.Book;
 import com.bookstoreapplication.model.Cart;
+import com.bookstoreapplication.model.Order;
 import com.bookstoreapplication.model.UserRegistration;
 import com.bookstoreapplication.repository.BookStoreCartRepository;
 import com.bookstoreapplication.repository.BookStoreRepository;
@@ -22,7 +24,7 @@ import java.util.Optional;
 /**
  * Created CartService class to serve api calls done by controller layer
  */
-public class CartService implements ICartService{
+public class CartService implements ICartService {
 
     /**
      * Autowired interfaces to inject its dependency here
@@ -37,19 +39,40 @@ public class CartService implements ICartService{
     /**
      * create a method name as insertItems
      * Ability to save cart details to repository
+     *
      * @param cartdto - cart data
      * @return - save all data
      */
-    @Override
+//    @Override
+//    public Cart insertItems(CartDTO cartdto) {
+//        Optional<Book> book = bookStoreRepository.findById(cartdto.getBookId());
+//        Optional<UserRegistration> userRegistration = userRegistrationRepository.findById(cartdto.getUserId());
+//        if (book.isPresent() && userRegistration.isPresent()) {
+//            if (cartdto.getQuantity() <= book.get().getQuantity()) {
+//                Cart newCart = new Cart(cartdto.getQuantity(), book.get(), userRegistration.get());
+//                bookStoreCartRepository.save(newCart);
+//                return newCart;
+//            }
+//            else {}
+//        } else {
+//            throw new BookStoreException("Book or User does not exists");
+//        }
+//    }
+
     public Cart insertItems(CartDTO cartdto) {
         Optional<Book> book = bookStoreRepository.findById(cartdto.getBookId());
-        Optional<UserRegistration> userRegistration = userRegistrationRepository.findById(cartdto.getUserId());
-        if (book.isPresent() && userRegistration.isPresent()) {
-            Cart newCart = new Cart(cartdto.getQuantity(), book.get(), userRegistration.get());
-            bookStoreCartRepository.save(newCart);
-            return newCart;
+        Optional<UserRegistration> user = userRegistrationRepository.findById(cartdto.getUserId());
+        if (book.isPresent() && user.isPresent()) {
+            if (cartdto.getQuantity()<= book.get().getQuantity()) {
+                int quantity = book.get().getQuantity()-cartdto.getQuantity();
+                Cart newCart = new Cart(cartdto.getQuantity(), book.get(), user.get());
+                bookStoreCartRepository.save(newCart);
+                return newCart;
+            } else {
+                throw new BookStoreException("Requested quantity is not available");
+            }
         } else {
-            throw new BookStoreException("Book or User does not exists");
+            throw new BookStoreException("Book or User doesn't exists");
         }
     }
 

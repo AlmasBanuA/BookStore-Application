@@ -36,6 +36,7 @@ public class OrderService implements IOrderService {
     /**
      * create a method name as insertOrder
      * Ability to save order details to repository
+     *
      * @param orderdto - order data
      * @return - save all data
      */
@@ -43,8 +44,8 @@ public class OrderService implements IOrderService {
         Optional<Book> book = bookRepo.findById(orderdto.getBookId());
         Optional<UserRegistration> user = userRepo.findById(orderdto.getUserId());
         if (book.isPresent() && user.isPresent()) {
-            if (orderdto.getQuantity()<= book.get().getQuantity()) {
-                int quantity = book.get().getQuantity()-orderdto.getQuantity();
+            if (orderdto.getQuantity() <= book.get().getQuantity()) {
+                int quantity = book.get().getQuantity() - orderdto.getQuantity();
                 book.get().setQuantity(quantity);
                 bookRepo.save(book.get());
                 Order newOrder = new Order(book.get().getPrice(), orderdto.getQuantity(), orderdto.getAddress(), book.get(), user.get(), orderdto.isCancel());
@@ -62,6 +63,7 @@ public class OrderService implements IOrderService {
     /**
      * create a method name as getAllOrderRecords
      * - Ability to get all order data by findAll() method
+     *
      * @return - all data
      */
     public List<Order> getAllOrderRecords() {
@@ -73,6 +75,7 @@ public class OrderService implements IOrderService {
     /**
      * create a method name as getOrderRecord
      * - Ability to get order data by Id
+     *
      * @param id - order id
      * @return - order data by id
      */
@@ -89,7 +92,8 @@ public class OrderService implements IOrderService {
     /**
      * create a method name as updateOrderRecord
      * Ability to update order data for particular id
-     * @param id - order id
+     *
+     * @param id  - order id
      * @param dto - order data
      * @return - updated Order information in JSON format
      */
@@ -102,7 +106,7 @@ public class OrderService implements IOrderService {
         } else {
             if (book.isPresent() && user.isPresent()) {
                 if (dto.getQuantity() <= book.get().getQuantity()) {
-                    int quantity = book.get().getQuantity()-dto.getQuantity();
+                    int quantity = book.get().getQuantity() - dto.getQuantity();
                     book.get().setQuantity(quantity);
                     bookRepo.save(book.get());
                     Order newOrder = new Order(id, book.get().getPrice(), dto.getQuantity(), dto.getAddress(), book.get(), user.get(), dto.isCancel());
@@ -122,6 +126,7 @@ public class OrderService implements IOrderService {
     /**
      * create a method name as deleteOrderRecord
      * ability to delete data by particular  id
+     *
      * @param id -order id
      * @return - return stored data
      */
@@ -134,5 +139,27 @@ public class OrderService implements IOrderService {
             log.info("Order record deleted successfully for id " + id);
             return order.get();
         }
+    }
+
+    /**
+     * create a method name as CancelOrderRecord
+     * ability to Cancel data by particular  id
+     *
+     * @param id -order id
+     * @return - return order data
+     */
+    public Order CancelOrderRecord(Integer id) {
+        Optional<Order> order = orderRepo.findById(id);
+        if (order.isEmpty()) {
+            throw new BookStoreException("Order Record doesn't exists");
+        } else {
+            Book book = order.get().getBook();
+            book.setQuantity(book.getQuantity()+order.get().getQuantity());
+            bookRepo.save(book);
+            orderRepo.deleteById(id);
+            log.info("Order record deleted successfully for id " + id);
+            return order.get();
+        }
+
     }
 }
