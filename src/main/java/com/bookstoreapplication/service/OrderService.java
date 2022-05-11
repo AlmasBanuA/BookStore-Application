@@ -153,6 +153,7 @@ public class OrderService implements IOrderService {
         if (order.isEmpty()) {
             throw new BookStoreException("Order Record doesn't exists");
         } else {
+            order.get().setCancel(true);
             Book book = order.get().getBook();
             book.setQuantity(book.getQuantity()+order.get().getQuantity());
             bookRepo.save(book);

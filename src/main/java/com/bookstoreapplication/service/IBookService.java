@@ -22,6 +22,8 @@ public interface IBookService {
 
     List<Book> getBookByName(String bookName);
 
+    List<Book> getBookByAuthorName(String authorName);
+
     List<Book> sortedListOfBooksInAscendingOrder();
 
     List<Book> sortedListOfBooksInDescendingOrder();

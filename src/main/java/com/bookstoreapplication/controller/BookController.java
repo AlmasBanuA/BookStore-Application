@@ -102,6 +102,19 @@ public class BookController {
     }
 
     /**
+     * Ability to get book data by author name.
+     * @param authorName - put author-name in url
+     * @return - book data by author name
+     */
+    @GetMapping("searchByAuthorName/{authorName}")
+    public ResponseEntity<ResponseDTO> getBookByAuthorName(@PathVariable("authorName") String authorName)
+    {
+        List<Book> listOfBooks = bookService.getBookByAuthorName(authorName);
+        ResponseDTO dto = new ResponseDTO("Data retrieved successfully (:",listOfBooks);
+        return new ResponseEntity(dto,HttpStatus.OK);
+    }
+
+    /**
      * ability to sort the Books by its Price in Ascending Order
      * @return -return books in ascending order
      */

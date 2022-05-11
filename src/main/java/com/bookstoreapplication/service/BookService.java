@@ -64,8 +64,7 @@ public class BookService implements IBookService{
         List<Book> getBooks=bookStoreRepository.findAll();
         return getBooks;
     }
-
-
+    
     /**
      * create a method name as updateRecordById
      * Ability to update book data for particular id
@@ -120,11 +119,25 @@ public class BookService implements IBookService{
     }
 
     /**
+     * create a method name as getBookByAuthorName
+     * ability to get Book data by particular book Author name
+     * @param author -book Author Name
+     * @return -return book Data
+     */
+    @Override
+    public List<Book> getBookByAuthorName(String author){
+        List<Book> findByAuthor = bookStoreRepository.findByBookAuthorName(author);
+        if (findByAuthor.isEmpty()){
+            throw new BookStoreException("Author for this book is not available");
+        }
+        return findByAuthor;
+    }
+
+    /**
      * create a method name as sortedListOfBooksInAscendingOrder
      * ability to sort the Books by its Price in Ascending Order
      * @return -return books in ascending order
      */
-
     @Override
     public List<Book> sortedListOfBooksInAscendingOrder() {
         List<Book> getSortedList=  bookStoreRepository.getSortedListOfBooksInAsc();
@@ -136,7 +149,6 @@ public class BookService implements IBookService{
      * ability to sort the Books by its Price in Descending Order
      * @return -return books in descending order
      */
-
     @Override
     public List<Book> sortedListOfBooksInDescendingOrder() {
         List<Book> getSortedListInDesc=  bookStoreRepository.getSortedListOfBooksInDesc();
